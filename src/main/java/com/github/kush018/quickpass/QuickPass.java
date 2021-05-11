@@ -102,7 +102,7 @@ public class QuickPass {
                 case 5: save(passwordDB, vaultFileName, password); break;
                 case 6: save(passwordDB, vaultFileName, password); return;
                 case 7: return;
-                case 8: changeMasterPasswordAndSave(passwordDB, vaultFileName); break;
+                case 8: password = changeMasterPasswordAndSave(passwordDB, vaultFileName, password); break;
                 default:
                     System.out.println("Invalid choice entered");
             }
@@ -212,14 +212,14 @@ public class QuickPass {
         }
     }
 
-    public static void changeMasterPasswordAndSave(Database db, String fileName) {
+    public static String changeMasterPasswordAndSave(Database db, String fileName, String oldPassword) {
         System.out.print("Enter new password: ");
         String password = sc.nextLine();
         System.out.print("Confirm password: ");
         String confirm = sc.nextLine();
         if (!confirm.equals(password)) {
             System.out.println("Passwords dont match. Aborting ...");
-            return;
+            return oldPassword;
         }
         try {
             byte[] pBytes = DBEncryptor.getBytes(db);
@@ -229,5 +229,6 @@ public class QuickPass {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return password;
     }
 }
