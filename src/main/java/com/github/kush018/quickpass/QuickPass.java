@@ -83,8 +83,9 @@ public class QuickPass {
                     "4) View Details of an entry\n" +
                     "5) Save changes\n" +
                     "6) Save and quit\n" +
-                    "7) Quit without saving");
-            System.out.print("Enter your choice (1-5): ");
+                    "7) Quit without saving\n" +
+                    "8) Change master password and save");
+            System.out.print("Enter your choice (1-8): ");
             int choice = 0;
             try {
                 choice = Integer.parseInt(sc.nextLine());
@@ -101,6 +102,7 @@ public class QuickPass {
                 case 5: save(passwordDB, vaultFileName, password); break;
                 case 6: save(passwordDB, vaultFileName, password); return;
                 case 7: return;
+                case 8: changeMasterPasswordAndSave(passwordDB, vaultFileName); break;
                 default:
                     System.out.println("Invalid choice entered");
             }
@@ -200,6 +202,25 @@ public class QuickPass {
     }
 
     public static void save(Database db, String fileName, String password) {
+        try {
+            byte[] pBytes = DBEncryptor.getBytes(db);
+            byte[] cBytes = DBEncryptor.encryptBytes(pBytes, password);
+            Files.write(Paths.get(fileName), cBytes);
+            System.out.println("File saved successfully!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void changeMasterPasswordAndSave(Database db, String fileName) {
+        System.out.print("Enter new password: ");
+        String password = sc.nextLine();
+        System.out.print("Confirm password: ");
+        String confirm = sc.nextLine();
+        if (!confirm.equals(password)) {
+            System.out.println("Passwords dont match. Aborting ...");
+            return;
+        }
         try {
             byte[] pBytes = DBEncryptor.getBytes(db);
             byte[] cBytes = DBEncryptor.encryptBytes(pBytes, password);
