@@ -34,9 +34,9 @@ public class QuickPass {
             newVaultCreated = true;
             System.out.println("Vault does not exist. Creating new vault ...");
             System.out.print("Enter vault master password: ");
-            password = sc.nextLine();
+            password = new String(System.console().readPassword());
             System.out.print("Reenter vault master password: ");
-            String confirmPassword = sc.nextLine();
+            String confirmPassword = new String(System.console().readPassword());
             if (!confirmPassword.equals(password)) {
                 //if both password and confirm password dont match
                 System.out.println("Passwords dont match. Aborting ...");
@@ -60,7 +60,7 @@ public class QuickPass {
         if (!newVaultCreated) {
             //if new vault was not created, we need to ask for a password
             System.out.print("Enter master password: ");
-            password = sc.nextLine();
+            password = new String(System.console().readPassword());
         }
         try {
             byte[] cBytes = Files.readAllBytes(Paths.get(vaultFileName));
@@ -213,9 +213,9 @@ public class QuickPass {
 
     public static String changeMasterPasswordAndSave(Database db, String fileName, String oldPassword) {
         System.out.print("Enter new password: ");
-        String password = sc.nextLine();
+        String password = new String(System.console().readPassword());
         System.out.print("Confirm password: ");
-        String confirm = sc.nextLine();
+        String confirm = new String(System.console().readPassword());
         if (!confirm.equals(password)) {
             System.out.println("Passwords dont match. Aborting ...");
             return oldPassword;
