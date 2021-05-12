@@ -76,35 +76,34 @@ public class QuickPass {
         System.out.println("Access granted");
         System.out.println();
 
+        System.out.println("Welcome to Quick Pass command line password manager.\n" +
+                "Enter command \"help\" to see a list of valid commands");
+
         while (true) {
-            System.out.println("1) View All Entry Names\n" +
-                    "2) Edit an entry\n" +
-                    "3) Add an entry\n" +
-                    "4) View Details of an entry\n" +
-                    "5) Save changes\n" +
-                    "6) Save and quit\n" +
-                    "7) Quit without saving\n" +
-                    "8) Change master password and save");
-            System.out.print("Enter your choice (1-8): ");
-            int choice = 0;
-            try {
-                choice = Integer.parseInt(sc.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid number entered.");
-                System.out.println();
-                continue;
-            }
+            System.out.print("> ");
+            String choice = sc.nextLine();
             switch (choice) {
-                case 1: printAllEntryNames(passwordDB); break;
-                case 2: editEntry(passwordDB); break;
-                case 3: addEntry(passwordDB); break;
-                case 4: getDetailsOfEntry(passwordDB); break;
-                case 5: save(passwordDB, vaultFileName, password); break;
-                case 6: save(passwordDB, vaultFileName, password); return;
-                case 7: return;
-                case 8: password = changeMasterPasswordAndSave(passwordDB, vaultFileName, password); break;
+                case "list": printAllEntryNames(passwordDB); break;
+                case "edit": editEntry(passwordDB); break;
+                case "add": addEntry(passwordDB); break;
+                case "details": getDetailsOfEntry(passwordDB); break;
+                case "save": save(passwordDB, vaultFileName, password); break;
+                case "quit": save(passwordDB, vaultFileName, password); return;
+                case "!quit": return;
+                case "chpasswd": password = changeMasterPasswordAndSave(passwordDB, vaultFileName, password); break;
+                case "help":
+                    System.out.println("List of valid commands:\n" +
+                            "list - list all entry names in database\n" +
+                            "edit - edit a particular entry\n" +
+                            "add - add a new entry\n" +
+                            "details - view details of an entry\n" +
+                            "save - save changes\n" +
+                            "quit - save changes and quit\n" +
+                            "!quit - quit without saving\n" +
+                            "chpasswd - change master password\n" +
+                            "help - view help menu");
                 default:
-                    System.out.println("Invalid choice entered");
+                    System.out.println("Invalid command" + choice + ". Use \"help\" for a list of valid commands");
             }
             System.out.println();
         }
