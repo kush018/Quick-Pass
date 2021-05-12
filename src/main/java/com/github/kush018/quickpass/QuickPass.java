@@ -91,6 +91,7 @@ public class QuickPass {
                 case "quit": save(passwordDB, vaultFileName, password); return;
                 case "!quit": return;
                 case "chpasswd": password = changeMasterPasswordAndSave(passwordDB, vaultFileName, password); break;
+                case "generate": generateNewPassword(passwordDB); break;
                 case "help":
                     System.out.println("List of valid commands:\n" +
                             "list - list all entry names in database\n" +
@@ -101,6 +102,7 @@ public class QuickPass {
                             "quit - save changes and quit\n" +
                             "!quit - quit without saving\n" +
                             "chpasswd - change master password\n" +
+                            "generate - generate a password for an entry\n" +
                             "help - view help menu");
                 default:
                     System.out.println("Invalid command" + choice + ". Use \"help\" for a list of valid commands");
@@ -229,5 +231,64 @@ public class QuickPass {
             e.printStackTrace();
         }
         return password;
+    }
+
+    public static void generateNewPassword(Database db) {
+        System.out.print("Enter name of entry whose password you would like to generate: ");
+        String entryName = sc.nextLine();
+        Table table = db.getTableHashMap().get("main");
+        List<Table.Row> rowList = table.search("name", entryName);
+        Table.Row currentRow = null;
+        if (rowList.size() == 0) {
+            System.out.println("No entries found");
+        } else {
+            currentRow = rowList.get(0);
+            System.out.print("Enter length of password: ");
+            int length;
+            try {
+                length = Integer.parseInt(sc.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid number entered.");
+                return;
+            }
+
+            String symbolsCharSet = "!\";#$%&'()*+,-./:;<=>?@[]^_`{|}~";
+            String lowercaseLettersCharSet = "abcdefghijklmnopqrstuvwxyz";
+            String upperCaseLettersCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            String numbersCharSet = "0123456789";
+            StringBuilder charSetBuilder = new StringBuilder();
+            charSetBuilder.append(lowercaseLettersCharSet);
+            System.out.print("Allow upper case letters? (y/n): ");
+            String response = sc.nextLine();
+            if (response.equalsIgnoreCase("y")) {
+                charSetBuilder.append(upperCaseLettersCharset);
+            }
+            System.out.print("Allow numbers? (y/n): ");
+            response = sc.nextLine();
+            if (response.equalsIgnoreCase("y")) {
+                charSetBuilder.append(numbersCharSet);
+            }
+            System.out.print("Allow symbols? (y/n): ");
+            response = sc.nextLine();
+            if (response.equalsIgnoreCase("y")) {
+                charSetBuilder.append(symbolsCharSet);
+            }
+
+            StringBuilder passwordBuilder = new StringBuilder();
+            String charSet = charSetBuilder.toString();
+            for (int i = 0; i < length; i++) {
+                char c = charSet.charAt ( (int) (Math.random() * charSet.length()) );
+                passwordBuilder.append(c);
+            }
+            System.out.println("Your generated password is: " + passwordBuilder.toString());
+            System.out.print("Would you like to use it? (y/n): ");
+            String choice = sc.nextLine();
+            if (choice.equalsIgnoreCase("y")) {
+                currentRow.getMap().put("password", passwordBuilder.toString());
+                System.out.println("The password has been changed");
+            } else {
+                System.out.println("No change will be done to the original password");
+            }
+        }
     }
 }

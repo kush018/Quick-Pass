@@ -14,7 +14,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b18064f8-93aa-41ca-b95d-4150581532fe" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/github/kush018/quickpass/QuickPass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/kush018/quickpass/QuickPass.java" afterDir="false" />
     </list>
